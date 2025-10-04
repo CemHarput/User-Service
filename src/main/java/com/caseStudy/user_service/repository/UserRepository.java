@@ -12,6 +12,8 @@ import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 
+
+    @Query("select u from User u where lower(u.email) = lower(:email)")
     Optional<User> findByEmailIgnoreCase(String email);
     boolean existsByEmailIgnoreCase(String email);
 
