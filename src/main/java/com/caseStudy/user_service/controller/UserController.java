@@ -48,12 +48,12 @@ public class UserController {
         UserDTO user = userService.getByEmail(email);
         return ResponseEntity.ok(user);
     }
-    @PutMapping("/{id}")
+    @PutMapping("/{email}")
     public ResponseEntity<UserDTO> updateUser(
-            @PathVariable UUID id,
+            @PathVariable String email,
             @Valid @RequestBody UserUpdateRequestDTO request
     )  {
-        UserDTO updated = userService.update(id, request);
+        UserDTO updated = userService.update(email, request);
         return ResponseEntity.ok(updated);
     }
 

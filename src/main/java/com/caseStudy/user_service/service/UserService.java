@@ -71,15 +71,18 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         return UserDTO.convertFromUser(u);
     }
-    public UserDTO update(UUID id, UserUpdateRequestDTO req)  {
-        log.info("Updating user with id: {}", id);
-        User u = userRepository.findById(id)
+    public UserDTO update(String email, UserUpdateRequestDTO req)  {
+        log.info("Updating user with email: {}", email);
+        User u = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+
         if (req.fullname() != null && !req.fullname().isBlank()) u.setFullName(req.fullname());
         u.setUpdatedBy(req.fullname());
         u.setUpdatedAt(Instant.now());
+        u.setStatus(req.status());
         userRepository.save(u);
-        log.info("User updated successfully: {}", id);
+        log.info("User updated successfully: {}", email);
         return UserDTO.convertFromUser(u);
     }
 
