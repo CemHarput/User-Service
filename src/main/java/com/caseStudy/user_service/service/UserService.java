@@ -42,8 +42,8 @@ public class UserService {
         u.setStatus(UserStatus.PENDING);
         u.setCreatedAt(Instant.now());
         u.setUpdatedAt(Instant.now());
-        u.setCreatedBy(userCreateRequestDTO.fullName());
-        u.setUpdatedBy(userCreateRequestDTO.fullName());
+        u.setCreatedBy(u.getId().toString());
+        u.setUpdatedBy(u.getId().toString());
         User saved = userRepository.save(u);
         log.info("User created successfully with id: {}", saved.getId());
         return UserDTO.convertFromUser(saved);
@@ -78,7 +78,7 @@ public class UserService {
 
 
         if (req.fullname() != null && !req.fullname().isBlank()) u.setFullName(req.fullname());
-        u.setUpdatedBy(req.fullname());
+        u.setUpdatedBy(u.getId().toString());
         u.setUpdatedAt(Instant.now());
         u.setStatus(req.status());
         userRepository.save(u);
