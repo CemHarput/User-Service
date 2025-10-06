@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -40,13 +39,9 @@ public class UserService {
         u.setEmail(userCreateRequestDTO.email());
         u.setFullName(userCreateRequestDTO.fullName());
         u.setStatus(UserStatus.PENDING);
-        u.setCreatedAt(Instant.now());
-        u.setUpdatedAt(Instant.now());
-        u.setCreatedBy(u.getId().toString());
-        u.setUpdatedBy(u.getId().toString());
-        User saved = userRepository.save(u);
-        log.info("User created successfully with id: {}", saved.getId());
-        return UserDTO.convertFromUser(saved);
+        userRepository.save(u);
+        log.info("User created successfully with id: {}", u.getId());
+        return UserDTO.convertFromUser(u);
     }
     @Transactional(readOnly = true)
     public PageResponse<UserSearchItemDTO> searchByNormalizedName(String fullname, int page, int size) {
@@ -72,18 +67,26 @@ public class UserService {
         return UserDTO.convertFromUser(u);
     }
     public UserDTO update(String email, UserUpdateRequestDTO req)  {
-        log.info("Updating user with email: {}", email);
+        log.debug("Updating user with email: {}", email);
         User u = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
 
         if (req.fullname() != null && !req.fullname().isBlank()) u.setFullName(req.fullname());
-        u.setUpdatedBy(u.getId().toString());
-        u.setUpdatedAt(Instant.now());
         u.setStatus(req.status());
         userRepository.save(u);
         log.info("User updated successfully: {}", email);
         return UserDTO.convertFromUser(u);
+    }
+
+    public void delete(String email){
+        log.debug("Updating user with email: {}", email);
+        User u = userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        userRepository.delete(u);
+        log.info("User deleted successfully: {}", email);
+
     }
 
 

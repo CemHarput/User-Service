@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -25,10 +26,10 @@ public class AuditBase {
 
     @CreatedBy
     @Column(name = "created_by", length = 100)
-    protected String createdBy;
+    protected UUID createdBy;
     @LastModifiedBy
     @Column(name = "updated_by", length = 100)
-    protected String updatedBy;
+    protected UUID updatedBy;
 
 
     @PrePersist
@@ -57,19 +58,20 @@ public class AuditBase {
         this.updatedAt = updatedAt;
     }
 
-    public String getCreatedBy() {
+
+    public UUID getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(UUID createdBy) {
         this.createdBy = createdBy;
     }
 
-    public String getUpdatedBy() {
+    public UUID getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(UUID updatedBy) {
         this.updatedBy = updatedBy;
     }
 }
