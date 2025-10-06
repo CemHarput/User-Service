@@ -25,10 +25,10 @@ public class AuditBase {
     protected Instant updatedAt;
 
     @CreatedBy
-    @Column(name = "created_by", length = 100)
+    @Column(name = "created_by")
     protected UUID createdBy;
     @LastModifiedBy
-    @Column(name = "updated_by", length = 100)
+    @Column(name = "updated_by")
     protected UUID updatedBy;
 
 
