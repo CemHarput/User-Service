@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -87,6 +88,13 @@ public class UserService {
         userRepository.delete(u);
         log.info("User deleted successfully: {}", email);
 
+    }
+    @Transactional(readOnly = true)
+    public UserDTO getByID(UUID id)  {
+        log.debug("Fetching user by id: {}", id);
+        User u = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        return UserDTO.convertFromUser(u);
     }
 
 
