@@ -15,7 +15,7 @@ import java.util.UUID;
 @Component
 @Order(0)
 public class AuditorFilter extends OncePerRequestFilter {
-    private static final String HEADER = "X-User-Id";
+    private static final String HEADER = "X-Acting-User";
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws ServletException, IOException {
