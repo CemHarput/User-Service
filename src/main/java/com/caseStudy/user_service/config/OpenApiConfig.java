@@ -24,14 +24,14 @@ public class OpenApiConfig {
                         .version("v1"))
                 .externalDocs(new ExternalDocumentation()
                         .description("API Docs")
-                        .url("http://localhost:8080/v3/api-docs"));
+                        .url("http://localhost:8081/v3/api-docs"));
     }
     @Bean
     public OpenApiCustomizer xUserIdOnlyForWriteOps() {
         return openApi -> {
             Parameter xUserId = new Parameter()
                     .in(ParameterIn.HEADER.toString())
-                    .name("X-User-Id")
+                    .name("X-Acting-User")
                     .description("Acting org id (UUID) – for auditing")
                     .required(true)
                     .schema(new StringSchema().format("uuid")
