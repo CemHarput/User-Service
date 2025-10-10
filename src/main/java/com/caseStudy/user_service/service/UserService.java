@@ -1,6 +1,7 @@
 package com.caseStudy.user_service.service;
 
 
+import com.caseStudy.user_service.client.OrganizationClient;
 import com.caseStudy.user_service.dto.*;
 import com.caseStudy.user_service.enums.UserStatus;
 import com.caseStudy.user_service.exception.UserAlreadyExistsException;
@@ -25,10 +26,12 @@ import java.util.UUID;
 public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
+    private final OrganizationClient organizationClient;
 
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, OrganizationClient organizationClient) {
         this.userRepository = userRepository;
+        this.organizationClient = organizationClient;
     }
 
     public UserDTO create(UserCreateRequestDTO userCreateRequestDTO)  {
@@ -95,6 +98,20 @@ public class UserService {
         User u = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         return UserDTO.convertFromUser(u);
+    }
+
+    public PageResponse<OrganizationDTO> getUserOrganizations(UUID userId, Pageable pageable) {
+
+        var sortParams = pageable.getSort().stream()
+                .map(o -> o.getProperty() + "," + o.getDirection().name().toLowerCase())
+                .toList();
+
+        return organizationClient.listUserOrganizations(
+                userId,
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                sortParams.isEmpty() ? null : sortParams
+        );
     }
 
 
